@@ -10,6 +10,26 @@
       }
     },
     {
+      "path": "/v1/config/env",
+      "method": "GET",
+      "statusCode": 200,
+      "response": {
+        "isProd": true
+      }
+    },
+    {
+      "path": "/v1/config/login",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "user": "",
+        "pass": ""
+      },
+      "response": {
+        "token": true
+      }
+    },
+    {
       "path": "/v1/config/:project",
       "method": "POST",
       "statusCode": 200,
