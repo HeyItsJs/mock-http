@@ -20,6 +20,11 @@
       }
     },
     {
+      "path": "/v1/config/:project",
+      "method": "DELETE",
+      "statusCode": 200
+    },
+    {
       "path": "/v1/config/:project/config",
       "method": "POST",
       "request": {
