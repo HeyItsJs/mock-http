@@ -1,7 +1,17 @@
 const config = require("./config")
 const express = require('express')
+const cors = require('cors');
 const app = express()
 app.use(express.json())
+
+// Allow CORS
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
 
 const port = config.port
 
