@@ -2,11 +2,32 @@
   "port": 4122,
   "routes": [
     {
-      "path": "/v1/config",
+      "path": "/v1/config/projects",
       "method": "GET",
       "statusCode": 200,
       "response": {
-        "projects": []
+        "projects": [
+          {
+            "id": "todo_app",
+            "name": "Todo App",
+            "secret": "00968748-833d-42e1-8cc9-1e711e606f62",
+            "modules": {
+              "crud": {},
+              "eventing": {
+                "enabled": true,
+                "dbType": "mongo",
+                "col": "event_logs"
+              },
+              "auth": {},
+              "services": {
+                "externalServices": {}
+              },
+              "fileStore": {
+                "enabled": false
+              }
+            }
+          }
+        ]
       }
     },
     {
@@ -30,7 +51,7 @@
       }
     },
     {
-      "path": "/v1/config/:project",
+      "path": "/v1/config/projects",
       "method": "POST",
       "statusCode": 200,
       "request": {
@@ -42,13 +63,13 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project",
+      "path": "/v1/config/projects/:project",
       "method": "DELETE",
       "statusCode": 200,
       "response": {}
     },
     {
-      "path": "/v1/config/:project/config",
+      "path": "/v1/config/projects/:project/config",
       "method": "POST",
       "request": {
         "secret": ""
@@ -57,7 +78,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/database/:db/connection-state",
+      "path": "/v1/config/projects/:project/database/:db/connection-state",
       "method": "GET",
       "statusCode": 200,
       "response": {
@@ -65,7 +86,7 @@
       }
     },
     {
-      "path": "/v1/config/:project/database/:db/config",
+      "path": "/v1/config/projects/:project/database/:db/config",
       "method": "POST",
       "request": {
         "enabled": true,
@@ -75,7 +96,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/database/:db/list-collections",
+      "path": "/v1/config/projects/:project/database/:db/list-collections",
       "method": "GET",
       "statusCode": 200,
       "response": {
@@ -86,7 +107,7 @@
       }
     },
     {
-      "path": "/v1/config/:project/database/:db/modify-schema",
+      "path": "/v1/config/projects/:project/database/:db/modify-schema",
       "method": "POST",
       "request": {
         "collections": {
@@ -99,7 +120,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/database/:db/reload-schema",
+      "path": "/v1/config/projects/:project/database/:db/reload-schema",
       "method": "POST",
       "statusCode": 200,
       "response": {
@@ -111,7 +132,7 @@
       }
     },
     {
-      "path": "/v1/config/:project/database/:db/collections/:col",
+      "path": "/v1/config/projects/:project/database/:db/collections/:col",
       "method": "DELETE",
       "request": {
         "schema": "type users"
@@ -120,7 +141,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/database/:db/collections/:col/modify-schema",
+      "path": "/v1/config/projects/:project/database/:db/collections/:col/modify-schema",
       "method": "POST",
       "request": {
         "schema": "type users"
@@ -129,7 +150,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/database/:db/collections/:col/inspect-schema",
+      "path": "/v1/config/projects/:project/database/:db/collections/:col/inspect-schema",
       "method": "GET",
       "statusCode": 200,
       "response": {
@@ -137,7 +158,7 @@
       }
     },
     {
-      "path": "/v1/config/:project/database/:db/collections/:col/rules",
+      "path": "/v1/config/projects/:project/database/:db/collections/:col/rules",
       "method": "POST",
       "request": {
         "isRealtimeEnabled": true,
@@ -147,7 +168,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/file-storage/connection-state",
+      "path": "/v1/config/projects/:project/file-storage/connection-state",
       "method": "GET",
       "statusCode": 200,
       "response": {
@@ -155,7 +176,7 @@
       }
     },
     {
-      "path": "/v1/config/:project/file-storage/config",
+      "path": "/v1/config/projects/:project/file-storage/config",
       "method": "POST",
       "request": {
         "enabled": true,
@@ -168,7 +189,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/file-storage/rules/:ruleName",
+      "path": "/v1/config/projects/:project/file-storage/rules/:ruleName",
       "method": "POST",
       "request": {
         "prefix": "",
@@ -178,13 +199,13 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/file-storage/rules/:ruleName",
+      "path": "/v1/config/projects/:project/file-storage/rules/:ruleName",
       "method": "DELETE",
       "statusCode": 200,
       "response": {}
     },
     {
-      "path": "/v1/config/:project/event-triggers/config",
+      "path": "/v1/config/projects/:project/event-triggers/config",
       "method": "POST",
       "request": {
         "enabled": true,
@@ -195,7 +216,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/event-triggers/queue",
+      "path": "/v1/config/projects/:project/event-triggers/queue",
       "method": "POST",
       "request": {
         "type": "",
@@ -205,7 +226,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/event-triggers/rules/:ruleName",
+      "path": "/v1/config/projects/:project/event-triggers/rules/:ruleName",
       "method": "POST",
       "request": {
         "type": "",
@@ -217,13 +238,13 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/event-triggers/rules/:ruleName",
+      "path": "/v1/config/projects/:project/event-triggers/rules/:ruleName",
       "method": "DELETE",
       "statusCode": 200,
       "response": {}
     },
     {
-      "path": "/v1/config/:project/services/:serviceName",
+      "path": "/v1/config/projects/:project/services/:serviceName",
       "method": "POST",
       "request": {
         "url": "localhost",
@@ -233,13 +254,13 @@
       "response": {}
     },
     {
-      "path": "/v1/config/:project/services/:serviceName",
+      "path": "/v1/config/projects/:project/services/:serviceName",
       "method": "DELETE",
       "statusCode": 200,
       "response": {}
     },
     {
-      "path": "/v1/config/:project/user-management/:provider",
+      "path": "/v1/config/projects/:project/user-management/:provider",
       "method": "POST",
       "request": {
         "enabled": true
