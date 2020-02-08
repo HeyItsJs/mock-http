@@ -9,19 +9,140 @@
         "projects": [
           {
             "id": "todo_app",
-            "name": "Todo App",
+            "name": "My Todo App",
             "secret": "00968748-833d-42e1-8cc9-1e711e606f62",
             "modules": {
-              "crud": {},
+              "crud": {
+                "mongo": {
+                  "conn": "localhost:8080",
+                  "enabled": true,
+                  "type": "mongo",
+                  "collections": {}
+                }
+              },
               "eventing": {
                 "enabled": true,
                 "dbType": "mongo",
-                "col": "event_logs"
+                "col": "event_logs",
+                "rules": {
+                  "customrule1": {
+                    "type": "custometype1",
+                    "retries": 2,
+                    "timeout": 500,
+                    "name": "customrule1",
+                    "url": "foo.bar/abc"
+                  }
+                }
+              },
+              "deployments": {
+                "services": [
+                  {
+                    "id": "service1",
+                    "name": "",
+                    "projectId": "todo_app",
+                    "version": "v1",
+                    "env": "",
+                    "labels": {},
+                    "scale": {
+                      "replicas": 3,
+                      "minReplicas": 1,
+                      "maxReplicas": 10,
+                      "concurrency": 200
+                    },
+                    "tasks": [
+                      {
+                        "id": "service1",
+                        "name": "",
+                        "ports": [
+                          {
+                            "name": "",
+                            "protocol": "http",
+                            "port": 5500
+                          }
+                        ],
+                        "resources": {
+                          "cpu": 10,
+                          "memory": 100
+                        },
+                        "docker": {
+                          "image": "spaceuptech/hello-world",
+                          "creds": {
+                            "username": "jayesh",
+                            "pass": "123"
+                          },
+                          "cmd": []
+                        },
+                        "env": {},
+                        "runtime": "image"
+                      }
+                    ],
+                    "affinity": [],
+                    "whitelists": [
+                      {
+                        "projectId": "todo_app",
+                        "service": "*"
+                      }
+                    ],
+                    "upstreams": [
+                      {
+                        "projectId": "todo_app",
+                        "service": "*"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "routes": [
+                {
+                  "id": "1",
+                  "source": {
+                    "hosts": ["foo.bar", "space.cloud"],
+                    "url": "/v1/api/",
+                    "rewrite": "/api/",
+                    "type": "prefix"
+                  },
+                  "dest": {
+                    "host": "service1.todo_app.svc.cluster.local",
+                    "port": "5500"
+                  }
+                }
+              ],
+              "letsencrypt": {
+                "domains": ["foo.bar"]
               },
               "auth": {},
               "services": {
                 "externalServices": {}
               },
+              "secrets": [
+                {
+                  "name": "DB Credentials",
+                  "type": "env",
+                  "rootPath": "",
+                  "data": {
+                    "DB_NAME": "",
+                    "DB_PASSWORD": ""
+                  }
+                },
+                {
+                  "name": "S3 Credentials",
+                  "type": "file",
+                  "rootPath": "~/.aws",
+                  "data": {
+                    "credentials.json": ""
+                  }
+                },
+                {
+                  "name": "Docker Credentials",
+                  "type": "docker",
+                  "rootPath": "",
+                  "data": {
+                    "username": "",
+                    "password": "",
+                    "url": ""
+                  }
+                }
+              ],
               "fileStore": {
                 "enabled": false
               }
@@ -35,7 +156,16 @@
       "method": "GET",
       "statusCode": 200,
       "response": {
-        "isProd": false
+        "isProd": true,
+        "version": "0.16.0"
+      }
+    },
+    {
+      "path": "/v1/config/refresh-token",
+      "method": "GET",
+      "statusCode": 200,
+      "response": {
+        "token": "some-token"
       }
     },
     {
@@ -238,6 +368,36 @@
       "response": {}
     },
     {
+      "path": "/v1/config/projects/:project/eventing/rules/:typeName",
+      "method": "POST",
+      "request": {
+       "rule": {}
+      },
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/config/projects/:project/eventing/rules/:typeName",
+      "method": "DELETE",
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/config/projects/:project/eventing/schema/:typeName",
+      "method": "POST",
+      "request": {
+       "schema": {}
+      },
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/config/projects/:project/eventing/schema/:typeName",
+      "method": "DELETE",
+      "statusCode": 200,
+      "response": {}
+    },
+    {
       "path": "/v1/config/projects/:project/event-triggers/rules/:ruleName",
       "method": "DELETE",
       "statusCode": 200,
@@ -266,6 +426,81 @@
         "enabled": true
       },
       "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/services",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "id": "service1"
+      },
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/:project/services/:service/:version",
+      "method": "DELETE",
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/:project/secrets",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "name": "DB Credentials",
+        "type": "env",
+        "rootPath": "",
+        "data": {
+          "DB_NAME": "mydb",
+          "DB_PASSWORD": "some-secret-pw"
+        }
+      },
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/:project/secrets/:secret",
+      "method": "DELETE",
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/:project/secrets/:secret/:key",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "value": "some-secret-key"
+      },
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/:project/secrets/:secret/:key",
+      "method": "DELETE",
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/config/projects/:project/routing/:routeId",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "id": "route1"
+      },
+      "response": {}
+    },
+    {
+      "path": "/v1/config/projects/:project/routing/:routeId",
+      "method": "DELETE",
+      "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/config/projects/:project/letsencrypt",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "domains": ["foo.bar"]
+      },
       "response": {}
     }
   ]
