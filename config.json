@@ -156,7 +156,7 @@
       "method": "GET",
       "statusCode": 200,
       "response": {
-        "isProd": true,
+        "isProd": false,
         "version": "0.16.0"
       }
     },
@@ -181,7 +181,7 @@
       }
     },
     {
-      "path": "/v1/config/projects",
+      "path": "/v1/config/projects/:project",
       "method": "POST",
       "statusCode": 200,
       "request": {
@@ -335,7 +335,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/projects/:project/event-triggers/config",
+      "path": "/v1/config/projects/:project/eventing/config",
       "method": "POST",
       "request": {
         "enabled": true,
@@ -346,7 +346,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/projects/:project/event-triggers/queue",
+      "path": "/v1/config/projects/:project/eventing/queue",
       "method": "POST",
       "request": {
         "type": "",
@@ -356,7 +356,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/projects/:project/event-triggers/rules/:ruleName",
+      "path": "/v1/config/projects/:project/eventing/triggers/:triggerName",
       "method": "POST",
       "request": {
         "type": "",
@@ -371,7 +371,7 @@
       "path": "/v1/config/projects/:project/eventing/rules/:typeName",
       "method": "POST",
       "request": {
-       "rule": {}
+        "rule": {}
       },
       "statusCode": 200,
       "response": {}
@@ -386,7 +386,7 @@
       "path": "/v1/config/projects/:project/eventing/schema/:typeName",
       "method": "POST",
       "request": {
-       "schema": {}
+        "schema": {}
       },
       "statusCode": 200,
       "response": {}
@@ -398,7 +398,7 @@
       "response": {}
     },
     {
-      "path": "/v1/config/projects/:project/event-triggers/rules/:ruleName",
+      "path": "/v1/config/projects/:project/eventing/triggers/:triggerName",
       "method": "DELETE",
       "statusCode": 200,
       "response": {}
@@ -429,7 +429,7 @@
       "response": {}
     },
     {
-      "path": "/v1/runner/services",
+      "path": "/v1/runner/:project/services/:serviceName/:version",
       "method": "POST",
       "statusCode": 200,
       "request": {
@@ -441,6 +441,46 @@
       "path": "/v1/runner/:project/services/:service/:version",
       "method": "DELETE",
       "statusCode": 200,
+      "response": {}
+    },
+    {
+      "path": "/v1/runner/:project/service-routes",
+      "method": "GET",
+      "statusCode": 200,
+      "response": {
+        "services": {
+          "service1": [
+            {
+              "id": "23456789",
+              "source": {
+                "port": 8080
+              },
+              "targets": [
+                {
+                  "port": 8080,
+                  "weight": 70,
+                  "version": "v1",
+                  "type": "version"
+                },
+                {
+                  "host": "foo.bar.com",
+                  "port": 8080,
+                  "weight": 30,
+                  "type": "external"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "/v1/runner/:project/service-routes/:serviceName",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "routes": []
+      },
       "response": {}
     },
     {
@@ -499,7 +539,46 @@
       "method": "POST",
       "statusCode": 200,
       "request": {
-        "domains": ["foo.bar"]
+        "domains": [
+          "foo.bar"
+        ]
+      },
+      "response": {}
+    },
+    {
+      "path": "/v1/config/clusters",
+      "method": "GET",
+      "statusCode": 200,
+      "response": {
+        "clusters": []
+      }
+    },
+    {
+      "path": "/v1/config/clusters/:clusterid",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "id": "1"
+      },
+      "response": {
+        "type": "docker" 
+      }
+    },
+    {
+      "path": "/v1/config/clusters/:clusterid/projects",
+      "method": "POST",
+      "statusCode": 200,
+      "request": {
+        "projectId": "todo_app"
+      },
+      "response": {}
+    },
+    {
+      "path": "/v1/config/clusters/:clusterid/projects",
+      "method": "DELETE",
+      "statusCode": 200,
+      "request": {
+        "projectId": "todo_app"
       },
       "response": {}
     }
